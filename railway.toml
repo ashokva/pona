@@ -1,12 +1,18 @@
-[build]
+[
+build
+]
 builder = "nixpacks"
-buildCommand = "npm install -g pnpm && pnpm install && pnpm run build"
+buildCommand = "pnpm run build"
 
-[deploy]
+[
+deploy
+]
 startCommand = "node apps/backend/dist/main.js"
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3
 
-[phases.setup]
+[
+phases.setup
+]
 nixPkgs = ['nodejs', 'python3']
 aptPkgs = ['build-essential', 'libudev-dev']
