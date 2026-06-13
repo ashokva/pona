@@ -1,17 +1,4 @@
 [
-build
-]
-builder = "nixpacks"
-buildCommand = "pnpm run build"
-
-[
-deploy
-]
-startCommand = "node apps/backend/dist/main.js"
-restartPolicyType = "on_failure"
-restartPolicyMaxRetries = 3
-
-[
 phases.setup
 ]
 nixPkgs = ['nodejs', 'python3']
