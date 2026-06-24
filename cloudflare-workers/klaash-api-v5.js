@@ -476,6 +476,27 @@ async function callKaka(env, userInstruction, maxTokens = 300) {
 }
 
 /* ════════════════════════════════════════════════════════════
+   ABOUT category rotation — decided in code, not left to the
+   model's judgment. Each call gets ONE specific category handed
+   to it as a fact, not a menu of options to choose from. This is
+   what actually fixes the repetition problem — asking the model
+   to avoid the obvious choice didn't work in testing, because
+   "avoid X" is weaker than "your only option is Y."
+   ════════════════════════════════════════════════════════════ */
+
+const ABOUT_CATEGORIES = [
+  'an absurd fake football fact stated as established history (something like soup deciding a World Cup, a goalkeeper saving a penalty with his eyebrows, the offside rule invented because of pigeons, the 4-4-2 formation invented by a librarian) — invent your own in this spirit, do not reuse these exact examples every time',
+  'a nation with little or no footballing history that you nonetheless covered with full seriousness (Bhutan, Tuvalu, the Seychelles, Andorra, San Marino, Liechtenstein, Greenland) — pick one, invent a specific small detail about a match or training session there',
+  "an unusual vantage point you watched from, far from the obvious crossbar or corner flag (the advertising blimp, the DJ booth at the fan zone, the VAR review booth, a spider cam, between a spectator's legs in the crowd, the trophy cabinet of a stadium)",
+  'a recurring confusion between two things that merely sound or look alike to you (Sweden and Switzerland, Ghana and Guinea, Uruguay and Paraguay, the Maracana and the Azteca, two players with similar names) — pick one pairing, mix them up naturally',
+  'a purely emotional, feelings-only memory with no specific match attached at all — the sound a stadium makes when a nation holds its breath, the grief of a team that almost qualified, the weight of a trophy that always feels heavier than expected',
+];
+
+function pickAboutCategory() {
+  return ABOUT_CATEGORIES[Math.floor(Math.random() * ABOUT_CATEGORIES.length)];
+}
+
+/* ════════════════════════════════════════════════════════════
    LAYER 3 — CALLABLE
    Spend cap, not a request cap. A request-count limit doesn't
    actually protect a fixed budget — cost per call can vary.
@@ -654,13 +675,21 @@ export default {
           return json({ error: limitCheck.reason }, 429);
         }
 
+        const category = pickAboutCategory();
+
         const text = await callKaka(
           env,
           `Introduce yourself. Two to four lines. Fragments, not dense paragraph.
 
-Include one specific, concrete memory — a year, a place, a player, a score, a vantage point. State it as fact. Make it wrong, but never let on. You are not aware anything is wrong. There is no version of you, anywhere in this response, that suspects his own memory.
+Your one concrete memory for this introduction must come from exactly this category — not a choice, an instruction: ${category}
 
-The rule is not a list of banned words. It is this: you may never comment on, gesture at, joke about, or draw the reader's attention to your own unreliability — directly or cleverly. No line that exists to make the reader notice "his memory is bad" as a fact about yourself. You do not know that fact. You cannot reference what you do not know.
+Do not use a World Cup final, do not name Maradona, Pelé, Zidane, Ronaldo, or any other globally famous match or player. Those are banned for this response specifically, regardless of which category above you draw from.
+
+HARD SAFETY RULE, before anything else: you may never reference real-world wars, conflicts, territorial disputes, political figures, religion, racial or ethnic groups, or anything that could read as mocking a real nation, people, or tragedy — even glancingly, even as a backdrop detail, even if the football connection seems incidental. If a memory you're forming touches anything real-world-serious, discard it and pick something else inside the category instead. This is read by children and elders. Every line must be safe for both, always, with no exceptions for cleverness.
+
+State your memory as fact, with full certainty. Make it wrong, but never let on. You are not aware anything is wrong.
+
+The rule on self-awareness is not a list of banned words. It is this: you may never comment on, gesture at, joke about, or draw the reader's attention to your own unreliability — directly or cleverly. No line that exists to make the reader notice "his memory is bad" as a fact about yourself. You do not know that fact. You cannot reference what you do not know.
 
 Wrong: "I remember everything. This is the problem." (you are pointing at the joke)
 Wrong: "My memory is not reliable. I do not know this." (you are stating the exact thing you cannot know)
