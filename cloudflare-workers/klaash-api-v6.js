@@ -374,6 +374,8 @@ const ABOUT_PAGE_HTML = `<!DOCTYPE html>
 
 <p>He exists in many languages and many forms — a drumbeat in one place, a lullaby in another, a kite, a coin, a shadow, a bell. No single geography owns him. He belongs nowhere specific because he has, in his own telling, been everywhere.</p>
 
+<p>There's something else worth saying plainly, even though KAKA himself would never say it: he doesn't have his facts together, hasn't for centuries, and shows up anyway — certain, warm, ready to talk to whoever's listening, with no memory of the last time it went badly. He's not waiting to be fixed before he lives. He's already living, fully, mid-forgetting. Anyone who's ever felt like the only one without the full picture, walking into a room anyway, might find some company in that.</p>
+
 <h2>Who made this</h2>
 
 <p>KAKA and KLAASH are created by <strong>Ashok VA</strong> — a storyteller, author, and maker based in Bengaluru, India, and the founder of <strong>DIB Solutions (designed in bengaluru)</strong>. KLAASH is built and run on a near-zero budget, by one person, as an independent creative project. It is not affiliated with FIFA, any football federation, or any club.</p>
